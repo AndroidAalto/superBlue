@@ -33,27 +33,25 @@ public class ImageViewer extends Activity implements OnClickListener {
     private static TextView block_0_Data;
     private static TextView status_Data;
 
-    // image view controls
-    private int gone = 0x00000008;
-    private int visible = 0x00000000;
-    private int invisible = 0x00000004;
-
     // NFC parts
     private static NfcAdapter mAdapter;
     private static PendingIntent mPendingIntent;
     private static IntentFilter[] mFilters;
     private static String[][] mTechLists;
+    
     // Hex help
     private static final byte[] HEX_CHAR_TABLE = { (byte) '0', (byte) '1', (byte) '2', (byte) '3', (byte) '4',
             (byte) '5', (byte) '6', (byte) '7', (byte) '8', (byte) '9', (byte) 'A', (byte) 'B', (byte) 'C', (byte) 'D',
             (byte) 'E', (byte) 'F' };
+    
     // Just for alerts
     // Mifare application directory keyA
     // public static final byte[] UID1 = {(byte) 0xDB, (byte) 0xAE, (byte) 0xD8,
     // (byte) 0xE9};
 
-    String UID1 = "DBAED8E9";
-    String UID2 = "1BAFD8E9";
+    /* hardcoded strings we have */
+    String UID1 = "0478578A";
+    String UID2 = "0496578A";
     String UID3 = "FBE4DDE9";
     String UID4 = "BBE4DDE9";
 
@@ -78,13 +76,6 @@ public class ImageViewer extends Activity implements OnClickListener {
         setContentView(R.layout.main);
         
         image = (ImageView) findViewById(R.id.image);
-
-        // integer value of image visibility
-        int gone = 0x00000008;
-        int visible = 0x00000000;
-        int invisible = 0x00000004;
-
-
 
         block_0_Data = (TextView) findViewById(R.id.block_0_data);
         status_Data = (TextView) findViewById(R.id.status_data);
@@ -139,6 +130,7 @@ public class ImageViewer extends Activity implements OnClickListener {
                     cardData = getHexString(data, 4);
                     if (cardData != null) {
                         block_0_Data.setText(cardData);
+                        myUID = cardData;
                     } else {
                         showAlert(EMPTY_BLOCK_0);
                     }
@@ -200,15 +192,15 @@ public class ImageViewer extends Activity implements OnClickListener {
     }
 
     public void imageDisp(String x) {
-        Log.e("TEST", "my tag " + x);
 
-        image = new ImageView(this);
+        image = (ImageView) findViewById(R.id.image);
         
         if (UID1.equals(x)) {
            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image1);
            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
            image.setImageDrawable(bitmapDrawable);
         } else if (UID2.equals(x)) {
+            Log.e("TEST", "I am called");
             Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image2);
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
             image.setImageDrawable(bitmapDrawable);
@@ -216,16 +208,12 @@ public class ImageViewer extends Activity implements OnClickListener {
             Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image3);
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
             image.setImageDrawable(bitmapDrawable);
-        } else if (UID4.equals(x)) {
+        } else {
             Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image4);
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
             image.setImageDrawable(bitmapDrawable);
-        } else {
-            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image1);
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-            image.setImageDrawable(bitmapDrawable);
         }
-        image.setVisibility(visible);
+
     }
 
     @Override

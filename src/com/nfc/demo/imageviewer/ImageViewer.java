@@ -38,12 +38,12 @@ public class ImageViewer extends Activity implements OnClickListener {
     private static PendingIntent mPendingIntent;
     private static IntentFilter[] mFilters;
     private static String[][] mTechLists;
-    
+
     // Hex help
     private static final byte[] HEX_CHAR_TABLE = { (byte) '0', (byte) '1', (byte) '2', (byte) '3', (byte) '4',
             (byte) '5', (byte) '6', (byte) '7', (byte) '8', (byte) '9', (byte) 'A', (byte) 'B', (byte) 'C', (byte) 'D',
             (byte) 'E', (byte) 'F' };
-    
+
     // Just for alerts
     // Mifare application directory keyA
     // public static final byte[] UID1 = {(byte) 0xDB, (byte) 0xAE, (byte) 0xD8,
@@ -52,8 +52,10 @@ public class ImageViewer extends Activity implements OnClickListener {
     /* hardcoded strings we have */
     String UID1 = "0478578A";
     String UID2 = "0496578A";
-    String UID3 = "FBE4DDE9";
-    String UID4 = "BBE4DDE9";
+    String UID3 = "0495578A";
+    String UID4 = "0485578A";
+    String UID5 = "0486578A";
+    String UID6 = "04112F9A";
 
     public static final byte[] KEY_MIFARE_APPLICATION_DIRECTORY = { (byte) 0xA0, (byte) 0xA1, (byte) 0xA2, (byte) 0xA3,
             (byte) 0xA4, (byte) 0xA5 };
@@ -68,17 +70,21 @@ public class ImageViewer extends Activity implements OnClickListener {
     public static final byte[] NXP_APP_KEYA = { (byte) 'A' };
 
     private ImageView image;
-    
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
+
         image = (ImageView) findViewById(R.id.image);
+        Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image1);
+        BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
+        image.setImageDrawable(bitmapDrawable);
 
         block_0_Data = (TextView) findViewById(R.id.block_0_data);
         status_Data = (TextView) findViewById(R.id.status_data);
+        
         // Capture Purchase button from layout
         Button scanBut = (Button) findViewById(R.id.clear_but);
         // Register the onClick listener with the implementation above
@@ -86,6 +92,7 @@ public class ImageViewer extends Activity implements OnClickListener {
         // Register the onClick listener with the implementation above
         scanBut.setOnClickListener(this);
         mAdapter = NfcAdapter.getDefaultAdapter(this);
+        
         // Create a generic PendingIntent that will be deliver to this activity.
         // The NFC stack
         // will fill in the intent with the details of the discovered tag before
@@ -158,10 +165,8 @@ public class ImageViewer extends Activity implements OnClickListener {
         } else {
             status_Data.setText("Online + Scan a tag");
         }
-        // image2.setVisibility(gone);
 
         imageDisp(myUID);
-
     }
 
     private void showAlert(int alertCase) {
@@ -179,28 +184,25 @@ public class ImageViewer extends Activity implements OnClickListener {
             alertbox.setMessage("Tag reading error");
             break;
         }
+        
         // set a positive/yes button and create a listener
         alertbox.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-
             // Save the data from the UI to the database - already done
             public void onClick(DialogInterface arg0, int arg1) {
                 clearFields();
             }
         });
-        // display box
+
         alertbox.show();
     }
 
     public void imageDisp(String x) {
 
-        image = (ImageView) findViewById(R.id.image);
-        
         if (UID1.equals(x)) {
-           Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image1);
-           BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-           image.setImageDrawable(bitmapDrawable);
+            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image1);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
+            image.setImageDrawable(bitmapDrawable);
         } else if (UID2.equals(x)) {
-            Log.e("TEST", "I am called");
             Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image2);
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
             image.setImageDrawable(bitmapDrawable);
@@ -208,12 +210,19 @@ public class ImageViewer extends Activity implements OnClickListener {
             Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image3);
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
             image.setImageDrawable(bitmapDrawable);
-        } else {
+        } else if (UID4.equals(x)) {
             Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image4);
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
             image.setImageDrawable(bitmapDrawable);
+        } else if (UID5.equals(x)) {
+            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image5);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
+            image.setImageDrawable(bitmapDrawable);
+        } else if (UID6.equals(x)) {
+            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image6);
+            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
+            image.setImageDrawable(bitmapDrawable);
         }
-
     }
 
     @Override

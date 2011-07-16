@@ -58,31 +58,9 @@
 				android:layout_below="@id/purchScanES1"
 				android:gravity="center_horizontal"				 
 				android:text="Clear" /> 
-	<ImageView 
-   android:id="@+id/image1"
-   android:src="@drawable/image1"
-   android:layout_width="wrap_content"
-   android:layout_height="wrap_content"
-   
-   />	
-<ImageView 
-   android:id="@+id/image2"
-   android:src="@drawable/image2"
-   android:layout_width="wrap_content"
-   android:layout_height="wrap_content"
-  
-   />
-<ImageView 
-   android:id="@+id/image3"
-   android:src="@drawable/image3"
-   android:layout_width="wrap_content"
-   android:layout_height="wrap_content"
-   
-   />
-<ImageView 
-   android:id="@+id/image4"
-   android:src="@drawable/image4"
-   android:layout_width="wrap_content"
-   android:layout_height="wrap_content"   
-    />
+	<ImageView android:id="@+id/image"
+   		android:src="@drawable/image1"
+   		android:layout_width="wrap_content"
+   		android:layout_height="wrap_content" />
+   			
 </RelativeLayout>

@@ -14,6 +14,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentFilter.MalformedMimeTypeException;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.MifareClassic;
@@ -40,6 +42,8 @@ public class ImageViewer extends Activity implements OnClickListener {
 	private int IV3 = gone;
 	private int IV4 = gone;
 	
+	private ImageView image;
+	
 	// NFC parts
 	private static NfcAdapter mAdapter;
 	private static PendingIntent mPendingIntent;
@@ -54,10 +58,12 @@ public class ImageViewer extends Activity implements OnClickListener {
     //Mifare application directory keyA
 	//public static final byte[] UID1 = {(byte) 0xDB, (byte) 0xAE, (byte) 0xD8, (byte) 0xE9};
 	
-	String UID1 = "DBAED8E9";
-	String UID2 = "1BAFD8E9";
-	String UID3 = "FBE4DDE9";
-	String UID4 = "BBE4DDE9";
+	private final String UID1 = "DBAED8E9";
+	private final String UID2 = "1BAFD8E9";
+	private final String UID3 = "FBE4DDE9";
+	private final String UID4 = "BBE4DDE9";
+	
+	private Bitmap bmp;
 	
 	public static final byte[] KEY_MIFARE_APPLICATION_DIRECTORY = {
         (byte) 0xA0, (byte) 0xA1, (byte) 0xA2, (byte) 0xA3,
@@ -79,10 +85,8 @@ public class ImageViewer extends Activity implements OnClickListener {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-    	ImageView image1 = (ImageView) findViewById(R.id.image1);
-    	ImageView image2 = (ImageView) findViewById(R.id.image2);
-    	ImageView image3 = (ImageView) findViewById(R.id.image3);
-    	ImageView image4 = (ImageView) findViewById(R.id.image4);
+    	image = (ImageView) findViewById(R.id.image);
+    	
     	//integer value of image visibility
     	int gone = 0x00000008;
     	int visible = 0x00000000;
@@ -90,11 +94,11 @@ public class ImageViewer extends Activity implements OnClickListener {
     	
     	//add indiv image views
     	
+    	
+    	
+    	
     	//Set all images to be GONE initially
-    	image1.setVisibility(IV1);
-        image2.setVisibility(IV2);
-        image3.setVisibility(IV3);
-        image4.setVisibility(IV4);
+
         
 		block_0_Data = (TextView) findViewById(R.id.block_0_data);
 		status_Data = (TextView) findViewById(R.id.status_data);
@@ -150,6 +154,7 @@ public class ImageViewer extends Activity implements OnClickListener {
 					cardData=getHexString(data,4);
 					if (cardData != null) {						
 						block_0_Data.setText(cardData);
+						myUID = cardData;
 					} else {
 						showAlert(EMPTY_BLOCK_0);
 					}
@@ -213,57 +218,33 @@ public class ImageViewer extends Activity implements OnClickListener {
 		alertbox.show();
 	}
 	
-	public void imageDisp(String x){
-		IV1=gone;
-		IV2=gone;
-		IV3=visible;
-		IV4=gone;
+	public void imageDisp(String x) {
+		Log.w("TAG ID", x);
 		
-		ImageView image1 = (ImageView) findViewById(R.id.image1);
-    	ImageView image2 = (ImageView) findViewById(R.id.image2);
-    	ImageView image3 = (ImageView) findViewById(R.id.image3);
-    	ImageView image4 = (ImageView) findViewById(R.id.image4);
-    	
-		image1.setVisibility(IV1);
-        image2.setVisibility(IV2);
-        image3.setVisibility(IV3);
-        image4.setVisibility(IV4);
-        
-        if(UID1.equals(x))
-        {
-        	image1.setVisibility(visible);
-            image2.setVisibility(gone);
-            image3.setVisibility(gone);
-            image4.setVisibility(gone);
-        }
-        else if (UID2.equals(x))
-        {
-        	image1.setVisibility(gone);
-            image2.setVisibility(visible);
-            image3.setVisibility(gone);
-            image4.setVisibility(gone);
-        }
-        else if (UID3.equals(x))
-        {
-        	image1.setVisibility(gone);
-            image2.setVisibility(gone);
-            image3.setVisibility(visible);
-            image4.setVisibility(gone);
-        }
-        else if (UID4.equals(x))
-        {
-        	image1.setVisibility(gone);
-            image2.setVisibility(gone);
-            image3.setVisibility(gone);
-            image4.setVisibility(visible);
-        }
-        else 
-        {
-        	image1.setVisibility(gone);
-            image2.setVisibility(gone);
-            image3.setVisibility(gone);
-            image4.setVisibility(gone);
-        }
+		IV1 = gone;
+		IV2 = gone;
+		IV3 = visible;
+		IV4 = gone;
+
+		if (UID1.equals(x)) {
+			bmp = BitmapFactory.decodeResource(getResources(),
+					R.drawable.image1);
+			image.setImageBitmap(bmp);
+		} else if (UID2.equals(x)) {
+			bmp = BitmapFactory.decodeResource(getResources(),
+					R.drawable.image2);
+			image.setImageBitmap(bmp);
+		} else if (UID3.equals(x)) {
+			bmp = BitmapFactory.decodeResource(getResources(),
+					R.drawable.image3);
+			image.setImageBitmap(bmp);
+		} else if (UID4.equals(x)) {
+			bmp = BitmapFactory.decodeResource(getResources(),
+					R.drawable.image4);
+			image.setImageBitmap(bmp);
+		} else {
+			image.setVisibility(gone);
+		}
 	}
 
 	@Override

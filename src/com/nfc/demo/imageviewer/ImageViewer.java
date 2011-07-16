@@ -6,6 +6,8 @@ http://mifareclassicdetectiononandroid.blogspot.com/2011/04/reading-mifare-class
 package com.nfc.demo.imageviewer;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -49,13 +51,8 @@ public class ImageViewer extends Activity implements OnClickListener {
     // public static final byte[] UID1 = {(byte) 0xDB, (byte) 0xAE, (byte) 0xD8,
     // (byte) 0xE9};
 
-    /* hardcoded strings we have */
-    String UID1 = "0478578A";
-    String UID2 = "0496578A";
-    String UID3 = "0495578A";
-    String UID4 = "0485578A";
-    String UID5 = "0486578A";
-    String UID6 = "04112F9A";
+    /* hardcoded strings we have in a hash*/
+    public Map<String, Integer> mHash = new HashMap<String, Integer>();
 
     public static final byte[] KEY_MIFARE_APPLICATION_DIRECTORY = { (byte) 0xA0, (byte) 0xA1, (byte) 0xA2, (byte) 0xA3,
             (byte) 0xA4, (byte) 0xA5 };
@@ -76,6 +73,14 @@ public class ImageViewer extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        
+        // Fill in the hash with tags and images
+        mHash.put("0478578A", R.drawable.image1);
+        mHash.put("0496578A", R.drawable.image2);
+        mHash.put("0495578A", R.drawable.image3);
+        mHash.put("0485578A", R.drawable.image4);
+        mHash.put("0486578A", R.drawable.image5);
+        mHash.put("04112F9A", R.drawable.image6);
 
         image = (ImageView) findViewById(R.id.image);
         Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image1);
@@ -111,7 +116,7 @@ public class ImageViewer extends Activity implements OnClickListener {
         // Setup a tech list for all NfcF tags
         mTechLists = new String[][] { new String[] { MifareClassic.class.getName() } };
         Intent intent = getIntent();
-        String cardData = null;
+
         resolveIntent(intent);
     }
 
@@ -197,29 +202,8 @@ public class ImageViewer extends Activity implements OnClickListener {
     }
 
     public void imageDisp(String x) {
-
-        if (UID1.equals(x)) {
-            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image1);
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-            image.setImageDrawable(bitmapDrawable);
-        } else if (UID2.equals(x)) {
-            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image2);
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-            image.setImageDrawable(bitmapDrawable);
-        } else if (UID3.equals(x)) {
-            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image3);
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-            image.setImageDrawable(bitmapDrawable);
-        } else if (UID4.equals(x)) {
-            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image4);
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-            image.setImageDrawable(bitmapDrawable);
-        } else if (UID5.equals(x)) {
-            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image5);
-            BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
-            image.setImageDrawable(bitmapDrawable);
-        } else if (UID6.equals(x)) {
-            Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.image6);
+        if ( mHash.containsKey(x) ) {
+            Bitmap bmp = BitmapFactory.decodeResource( getResources(), mHash.get(x) );
             BitmapDrawable bitmapDrawable = new BitmapDrawable(bmp);
             image.setImageDrawable(bitmapDrawable);
         }
